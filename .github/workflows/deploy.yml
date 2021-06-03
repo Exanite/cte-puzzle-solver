@@ -1,0 +1,30 @@
+﻿name: Github Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Vue.JS project to Github Pages
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - uses: actions/checkout@v2.3.2
+        with:
+          lfs: false
+      # Node.JS
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      # Build
+      - run: npm install
+      - run: npm run build
+      # Publish to gh-pages
+      - uses: s0/git-publish-subdir-action@2.5.0
+        env:
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
